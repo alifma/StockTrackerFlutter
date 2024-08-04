@@ -1,30 +1,49 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+import 'package:bloc_flutter/bloc/watchlist/watchlist_bloc.dart';
+import 'package:bloc_flutter/repository/token_repository.dart';
+import 'package:bloc_flutter/screens/watchlist_screen.dart';
+import 'package:bloc_flutter/theme.dart';
+import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'package:bloc_flutter/main.dart';
+class MockTokenRepository extends Mock implements TokenRepository {}
+
+class MockWatchlistBloc extends MockBloc<WatchlistEvent, WatchlistState>
+    implements WatchlistBloc {}
+
+class FakeWatchlistEvent extends Fake implements WatchlistEvent {}
+
+class FakeWatchlistState extends Fake implements WatchlistState {}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  late MockWatchlistBloc mockWatchlistBloc;
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  setUpAll(() {
+    registerFallbackValue(FakeWatchlistEvent());
+    registerFallbackValue(FakeWatchlistState());
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  setUp(() {
+    mockWatchlistBloc = MockWatchlistBloc();
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('Main.dart displays WatchlistScreen',
+      (WidgetTester tester) async {
+    when(() => mockWatchlistBloc.state).thenReturn(WatchlistInitial());
+    const appTheme = MaterialTheme(TextTheme());
+
+    await tester.pumpWidget(
+      BlocProvider<WatchlistBloc>(
+        create: (context) => mockWatchlistBloc,
+        child: MaterialApp(
+          theme: appTheme.light(),
+          home: const WatchlistScreen(),
+        ),
+      ),
+    );
+
+    expect(find.byType(WatchlistScreen), findsOneWidget);
   });
 }

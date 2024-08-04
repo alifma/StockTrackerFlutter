@@ -143,7 +143,7 @@ class DetailsScreen extends StatelessWidget {
                               DateTime.fromMillisecondsSinceEpoch(
                                   token.timestamp),
                           yValueMapper: (Token token, _) =>
-                              formatWithThousandSeparatorToNum(token.price),
+                              double.parse(token.price),
                           gradient: LinearGradient(
                             colors: <Color>[
                               Colors.blue.withOpacity(0.2),
@@ -163,7 +163,7 @@ class DetailsScreen extends StatelessWidget {
                               DateTime.fromMillisecondsSinceEpoch(
                                   token.timestamp),
                           yValueMapper: (Token token, _) =>
-                              formatWithThousandSeparatorToNum(token.price),
+                              double.parse(token.price),
                           color: Colors.blue,
                           markerSettings: const MarkerSettings(
                             isVisible: true,

@@ -11,18 +11,8 @@ double roundToTwoDecimalPlaces(String numberString) {
 String parseAndFormatAbsolute(String numberString) {
   double number = double.parse(numberString);
   double absoluteNumber = number.abs();
-  final NumberFormat formatter = NumberFormat('#,###.00');
+  final NumberFormat formatter = NumberFormat('#,##0.00');
   String formattedNumber = formatter.format(absoluteNumber);
-  return formattedNumber;
-}
-
-String formatWithThousandSeparator(String numberString) {
-  double number = double.parse(numberString);
-  List<String> parts = number.toString().split('.');
-  final NumberFormat formatter = NumberFormat('#,###');
-  String integerPart = formatter.format(int.parse(parts[0]));
-  String formattedNumber =
-      parts.length > 1 ? '$integerPart.${parts[1]}' : integerPart;
   return formattedNumber;
 }
 
@@ -34,17 +24,6 @@ Color conditionalTextColor(
       : isNeutral
           ? Colors.grey
           : Colors.green[900] ?? Colors.green;
-}
-
-String formatTimestamp(int timestamp) {
-  DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp);
-  String formattedDate = DateFormat('HH:mm:ss').format(date);
-  return formattedDate;
-}
-
-double formatWithThousandSeparatorToNum(String numberString) {
-  double number = double.parse(numberString);
-  return number;
 }
 
 bool showToast(String text) {
